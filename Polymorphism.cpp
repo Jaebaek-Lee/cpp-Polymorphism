@@ -18,13 +18,13 @@ class Base {
 public:
 	void fun() { display(); }
 	virtual void display() { cout << "Base" << endl; }
-	~Base() { cout << "Base destructor.\n"; }
+	virtual ~Base() { cout << "Base destructor.\n"; }
 };
 
 class Derived : public Base {
 public:
 	/*virtual(자동 상속)*/void display() override/*명시적으로 적음. 그리고 시그니처 다를때 오류를 띄워줌.*/
-	final/*여기까지만 오버라이딩 할 것. 파생 파생 클래스에서는 display를 재정의할 수 없음.*/ { cout << "Deriver" << endl; }
+	/*여기까지만 오버라이딩 할 것. 파생 파생 클래스에서는 display를 재정의할 수 없음.*/ { cout << "Deriver" << endl; }
 	//중복정의(오버로딩)이 아닌 재정의(오버라이딩). 완벽히 같은 프로토타입.
 	~Derived() { cout << "Derived destructor.\n"; }
 };
@@ -42,3 +42,20 @@ int main() {
 //재정의(오버라이딩). 베이스와 파생이 가진 똑같은 함수 시그니처가 있을때, 파생으로 재정의 된 것. 따라서 der.fun() 하면 변수 가리기로 파생이 호출.
 //하지만 Base 포인터로 파생 연결 후 base->fun() 하면 결국 base 타입이라 base의 함수가 호출됨. base::fun()마냥. 그래서 베이스의 함수 프로토타입을
 //virual 선언하면 베이스의 함수를 무시하고 파생에서 재정의된 함수를 호출하게 됨.
+
+//순수 가상함수 : 정의부를 가지고 있지 않음. 즉 = 0;으로 선언된 함수.
+//즉 형태만 가지고 있고 기능(동작)은 없음.
+//이걸 하나 이상 가지고 있으면 추상 클래스가 됨.
+//추상 클래스로는 객체를 만들 수 없다.
+//그러나 상속은 가능하다. 포인터와 참조자는 만들 수 있다. 다형성도 가능.
+//추상 클래스 - 자식클래스에게 다형성을 제공해준다. and 개발 효율 높아짐.
+
+//파생클래스는 반드시 모든 순수 가상함수를 오버라이딩 해야함. 안그러면 파생도
+//추상 클래스가 됨. -> 오버라이딩 다 되면 concrete class(구체, 구현)가 된다.
+
+//예외 : 순수가상함수를 외부 정의한 경우: 모든 파생클래스들에게 디폴트 기능을 제공하고 싶을 때 사용.
+//베이스에서 선언된 순수 가상함수는 파생의 파생에서도 오버라이딩 해야함.
+
+//const A* aptr = &ptr; - aptr이 간접적으로 가리키는 값을 변경할 수 없음.
+//A* const aptr = &ptr; - aptr이 가리키는 주소를 변경할 수 없음.
+//const A* const aptr = &ptr; - aptr이 간접적으로 가리키는 값과 주소를 모두 바꿀 수 없음.
